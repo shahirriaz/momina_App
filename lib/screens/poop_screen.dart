@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:momina_app/checkbox.dart';
+import 'package:momina_app/components/checkbox.dart';
 import 'package:momina_app/networking_and_firebase.dart';
-import 'consts.dart';
-import 'bottom_button.dart';
-import 'reusable_poop_image_card.dart';
+import '../consts.dart';
+import '../components/bottom_button.dart';
+import '../components/reusable_poop_image_card.dart';
 
 
 const kNumberTextStyle = TextStyle(
@@ -22,6 +22,7 @@ enum PoopColor {
 }
 
 class PoopScreen extends StatefulWidget {
+  static const String id = 'poop_screen';
   @override
   _PoopScreenState createState() => _PoopScreenState();
 }

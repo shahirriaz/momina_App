@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'consts.dart';
+import '../consts.dart';
 
 class SleepAwakeIconData extends StatelessWidget {
   SleepAwakeIconData({@required this.imageName, @required this.label, this.onTap});

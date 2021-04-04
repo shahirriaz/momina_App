@@ -1,21 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'consts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 
 class Networking {
 
   final _firestore = FirebaseFirestore.instance;
-  
+  final _auth = FirebaseAuth.instance;
+  User loggedInUser;
+
+
+
+  void getCurrentUser() async {
+    try {
+      final user =  _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
   Future<void> validateInputFromMilkScreenAndSendToFireBase({BuildContext context, int amount, String type, String comment}) async {
+
+    getCurrentUser();
+
     try{
       if(amount != null && type != null || comment != null){
         _firestore.collection('milk').add({
           'amount': amount,
           'type' : type,
           'comment' : comment,
+          'sender' : loggedInUser.email,
           'date': FieldValue.serverTimestamp(),
         });
         Navigator.pop(context);
@@ -32,12 +52,16 @@ class Networking {
   }
 
   Future<void> validateInputFromPoopScreenAndSendToFireBase({BuildContext context, String poopColor, double consistency, String amount}) async {
+
+    getCurrentUser();
+
     try{
       if(poopColor != null && consistency != null && amount != null){
         _firestore.collection('poop').add({
           'amount': amount,
           'color' : poopColor,
           'consistency' : consistency,
+          'sender' : loggedInUser.email,
           'date': FieldValue.serverTimestamp(),
         });
         Navigator.pop(context);
@@ -52,10 +76,14 @@ class Networking {
   }
 
   Future<void> validateInputFromHomeMoodScreenAndSendToFireBase({BuildContext context, String mood}) async {
+
+    getCurrentUser();
+
     try{
       if(mood != null){
         _firestore.collection('mood').add({
           'mood': mood,
+          'sender' : loggedInUser.email,
           'date': FieldValue.serverTimestamp(),
         });
         Navigator.pop(context);
@@ -71,20 +99,17 @@ class Networking {
 
 
   Future<void> validateInputFromHomeAwakeScreenAndSendToFireBase({BuildContext context, String awake}) async {
+
+    getCurrentUser();
+
     try{
 
       final currentTime = DateTime.now().hour;
 
-      if(currentTime > 5 && currentTime < 12 ) {
         _firestore.collection('sleepPattern').add({
           'awake' : awake,
+          'sender' : loggedInUser.email,
         });
-      }else {
-        showAlertDialog(
-            context,
-            'Time for register: Awake is between 05 and 12',
-            'Important message');
-      }
 
     } catch (e) {
         print(e);
@@ -92,31 +117,31 @@ class Networking {
   }
 
   Future<void> validateInputFromHomeSleepScreenAndSendToFireBase({BuildContext context, String asleep}) async {
+
+    getCurrentUser();
+
     try{
-
       final currentTime = DateTime.now().hour;
-
-      if(currentTime > 19 && currentTime < 22) {
         _firestore.collection('sleepPattern').add({
           'asleep' : asleep,
+          'sender' : loggedInUser.email,
         });
-      }else {
-        showAlertDialog(
-            context,
-            'Time for register: Asleep is between 18 and 22, registration failed',
-            'Important message');
-      }
+
     } catch (e) {
       print(e);
     }
   }
 
   Future<void> validateInputFromHomeFITScreenAndSendToFireBase({BuildContext context, String duration}) async {
+
+    getCurrentUser();
+
     try{
       if(duration != null){
         _firestore.collection('fit').add({
           'duration' : duration,
           'date': FieldValue.serverTimestamp(),
+          'sender' : loggedInUser.email,
         });
         Navigator.pop(context);
 
@@ -133,6 +158,9 @@ class Networking {
 
 
   Future<void> validateInputFromHomeFoodScreenAndSendToFireBase({BuildContext context, String a, String b, String c, String d, String e, String f}) async {
+
+    getCurrentUser();
+
     try{
         _firestore.collection('food').add({
           'yakhne' : a,
@@ -141,6 +169,7 @@ class Networking {
           'holleOrganic' : c,
           'havregrot' : d,
           'nestle' : e,
+          'sender' : loggedInUser.email,
           'date': FieldValue.serverTimestamp(),
         });
 

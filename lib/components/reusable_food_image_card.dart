@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'consts.dart';
+import '../consts.dart';
 import 'FoodTextField.dart';
 
 class FoodImageContainer extends StatelessWidget {

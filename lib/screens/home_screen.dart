@@ -1,27 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:momina_app/icon_content.dart';
-import 'package:momina_app/momi_images.dart';
+import 'package:momina_app/components/icon_content.dart';
+import 'package:momina_app/components/momi_images.dart';
 import 'package:momina_app/networking_and_firebase.dart';
-import 'reusable_card.dart';
+import '../components/reusable_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
-import 'consts.dart';
+import '../consts.dart';
 import 'milk_screen.dart';
 import 'poop_screen.dart';
 import 'food_screen.dart';
-import 'package:momina_app/SleepawakeIconData.dart';
-import 'package:momina_app/LabelContainter.dart';
+import 'package:momina_app/components/SleepawakeIconData.dart';
+import 'package:momina_app/components/LabelContainter.dart';
 import 'package:intl/intl.dart';
-
 
 
 String dateFormat;
 
 class HomeScreen extends StatefulWidget {
+  static const String id = 'home_screen';
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
+
 
 class _HomeScreenState extends State<HomeScreen> {
 

@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:momina_app/FoodTextField.dart';
+import 'package:momina_app/components/FoodTextField.dart';
 import 'package:momina_app/networking_and_firebase.dart';
-import 'package:momina_app/reusable_food_image_card.dart';
-import 'consts.dart';
-import 'bottom_button.dart';
+import 'package:momina_app/components/reusable_food_image_card.dart';
+import '../consts.dart';
+import '../components/bottom_button.dart';
 
 class FoodScreen extends StatefulWidget {
+  static const String id = 'food_screen';
   @override
   _FoodScreenState createState() => _FoodScreenState();
 }
@@ -51,7 +52,7 @@ class _FoodScreenState extends State<FoodScreen> {
                 ),
               ),
               Expanded(
-                flex: 5,
+                flex: 4,
                 child: SingleChildScrollView(
                   child: Container(
                       child: Column(
