@@ -47,8 +47,12 @@ class _PoopScreenState extends State<PoopScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
           appBar: AppBar(
+            leading: BackButton(
+                color: Color(0xFF424242)
+            ),
             title: Text(
-              'Momi',
+              'Momi', style: TextStyle(color: Color(0xFF424242)
+            ),
             ),
           ),
           body: Column(

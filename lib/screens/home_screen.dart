@@ -36,109 +36,122 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Momi',
-            style: TextStyle(color: Color(0xFF424242)),
-          ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Reusable_Card(
-                    onPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MilkScreen(),
-                        ),
-                      );
-                      setState(() {
-                       //SOMETHING
-                      });
-                    },
-                    colour: kInactiveCardColourPrimary,
-                    cardChild: ReusableIcon(
-                      icon: MdiIcons.babyBottle,
-                      colour: Color(0xFFB1E3FB),
-                      label: 'MILK',
-                    ),
-                  )),
-                  Expanded(
-                      child: Reusable_Card(
-                    onPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PoopScreen()),
-                      );
-                      setState(() {
-                        //SOMETHING
-                      });
-                    },
-                    colour: kInactiveCardColourPrimary,
-                    cardChild: ReusableIcon(
-                      icon: MdiIcons.emoticonPoop,
-                      colour: Colors.brown,
-                      label: 'POOPY',
-                    ),
-                  )),
-                ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.logout, color: Color(0xFF424242),),
+                onPressed: () => Navigator.of(context).pop(),
               ),
+              title:  Text(
+                'Momi',
+                style: TextStyle(color: Color(0xFF424242)),
+              ),
+              centerTitle: true,
             ),
-            Expanded(
-              flex: 1,
-                child:  SizedBox(
-                  height: 200, // card height
-                  child: PageView.builder(
-                    itemCount: 2,
-                    controller: PageController(viewportFraction: 0.8),
-                    onPageChanged: (int index) => setState(() => _index = index),
-                    itemBuilder: (_, i) {
-                      return buildSwipeCard(i, _index);
-                    },
+            body: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Reusable_Card(
+                        onPress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MilkScreen(),
+                            ),
+                          );
+                          setState(() {
+                           //SOMETHING
+                          });
+                        },
+                        colour: kInactiveCardColourPrimary,
+                        cardChild: ReusableIcon(
+                          icon: MdiIcons.babyBottle,
+                          colour: Color(0xFFB1E3FB),
+                          label: 'MILK',
+                        ),
+                      )),
+                      Expanded(
+                          child: Reusable_Card(
+                        onPress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PoopScreen()),
+                          );
+                          setState(() {
+                            //SOMETHING
+                          });
+                        },
+                        colour: kInactiveCardColourPrimary,
+                        cardChild: ReusableIcon(
+                          icon: MdiIcons.emoticonPoop,
+                          colour: Colors.brown,
+                          label: 'POOPY',
+                        ),
+                      )),
+                    ],
                   ),
                 ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Reusable_Card(
-                    onPress: () {
-                      showBottomSheetTimePicker(context);
-                    },
-                    colour: kInactiveCardColourPrimary,
-                    cardChild: ReusableIcon(
-                      icon: MdiIcons.emoticonConfused,
-                      colour: Colors.green.shade400,
-                      label: 'FIT',
+                Expanded(
+                  flex: 1,
+                    child:  SizedBox(
+                      height: 200, // card height
+                      child: PageView.builder(
+                        itemCount: 2,
+                        controller: PageController(viewportFraction: 0.8),
+                        onPageChanged: (int index) => setState(() => _index = index),
+                        itemBuilder: (_, i) {
+                          return buildSwipeCard(i, _index);
+                        },
+                      ),
                     ),
-                  )),
-                  Expanded(
-                      child: Reusable_Card(
-                    onPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FoodScreen()),
-                      );
-                    },
-                    colour: kInactiveCardColourPrimary,
-                    cardChild: ReusableIcon(
-                      icon: MdiIcons.hamburger,
-                      colour: Colors.red.shade900,
-                      label: 'FOOD',
-                    ),
-                  )),
-                ],
-              ),
-            ),
-          ],
-        ));
+                ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Reusable_Card(
+                        onPress: () {
+                          showBottomSheetTimePicker(context);
+                        },
+                        colour: kInactiveCardColourPrimary,
+                        cardChild: ReusableIcon(
+                          icon: MdiIcons.emoticonConfused,
+                          colour: Colors.green.shade400,
+                          label: 'FIT',
+                        ),
+                      )),
+                      Expanded(
+                          child: Reusable_Card(
+                        onPress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => FoodScreen()),
+                          );
+                        },
+                        colour: kInactiveCardColourPrimary,
+                        cardChild: ReusableIcon(
+                          icon: MdiIcons.hamburger,
+                          colour: Colors.red.shade900,
+                          label: 'FOOD',
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+      ),
+    );
   }
 
   Transform buildSwipeCard(int i, int index) {

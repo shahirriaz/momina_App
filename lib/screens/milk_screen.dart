@@ -31,64 +31,72 @@ class _MilkScreenState extends State<MilkScreen> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Momi',
-            style: TextStyle(
-              color: Color(0xFF424242)
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            leading: BackButton(
+                color: Color(0xFF424242)
+            ),
+            title: Text(
+              'Momi',
+              style: TextStyle(
+                color: Color(0xFF424242)
+              ),
             ),
           ),
-        ),
-        body: SingleChildScrollView(
-          child: IntrinsicHeight(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(15.0),
-                  alignment: Alignment.centerLeft,
-                  child: Text('MILK',
-                    style: kTitleStyle,
+          body: SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(15.0),
+                    alignment: Alignment.centerLeft,
+                    child: Text('MILK',
+                      style: kTitleStyle,
+                    ),
                   ),
-                ),
-                Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: () => bottomModalSheetType(context),
-                      child: Amount_Milk_Card(controller2: _controller2),
-                    )
-                ),
-                Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: () => bottomModalSheetAmount(context),
-                      child: Type_Milk_Card(controller: _controller),
-                    )
-                ),
-                Expanded(
-                    flex: 2,
-                    child: Comment_Card(
-                      onChange: (value){
-                        setState(() {
-                          commmentToSendToFireStore = value;
-                        });
-                      },
-                    )
-                ),
+                  Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () => bottomModalSheetType(context),
+                        child: Amount_Milk_Card(controller2: _controller2),
+                      )
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: GestureDetector(
+                        onTap: () => bottomModalSheetAmount(context),
+                        child: Type_Milk_Card(controller: _controller),
+                      )
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: Comment_Card(
+                        onChange: (value){
+                          setState(() {
+                            commmentToSendToFireStore = value;
+                          });
+                        },
+                      )
+                  ),
 
-                BottomButton(
-                  onTap: () {
-                    Networking().validateInputFromMilkScreenAndSendToFireBase(context: context, amount: amountMilkToSendToFireStore, type: typeMilkToSendToFireStore, comment: commmentToSendToFireStore);
-                  },
-                  buttonTitle: 'SUBMIT',
-                ),
+                  BottomButton(
+                    onTap: () {
+                      Networking().validateInputFromMilkScreenAndSendToFireBase(context: context, amount: amountMilkToSendToFireStore, type: typeMilkToSendToFireStore, comment: commmentToSendToFireStore);
+                    },
+                    buttonTitle: 'SUBMIT',
+                  ),
 
 
-              ],
+                ],
+              ),
             ),
-          ),
-        )
+          )
+      ),
     );
   }
   
@@ -100,15 +108,14 @@ class _MilkScreenState extends State<MilkScreen> {
       context: context,
       builder: (BuildContext context) =>
         Container(
-          padding: EdgeInsets.all(8),
-          height: 200,
+          height: MediaQuery.of(context).size.height / 3,
           alignment: Alignment.center,
           child: CupertinoPicker(
+            backgroundColor: kActiveCardColourPrimary,
             scrollController: FixedExtentScrollController(
               initialItem: _selectedNumber,
             ),
             itemExtent: 32.0,
-            backgroundColor: Colors.white,
             onSelectedItemChanged: (int value) {
               _controller.text = melkeType[value];
 
@@ -135,14 +142,13 @@ class _MilkScreenState extends State<MilkScreen> {
       context: context,
       builder: (BuildContext context) =>
           Container(
-            padding: EdgeInsets.all(8),
-            height: 200,
+            height: MediaQuery.of(context).size.height / 3,
             alignment: Alignment.center,
             child: CupertinoPicker(
               scrollController: FixedExtentScrollController(
               ),
               itemExtent: 32.0,
-              backgroundColor: Colors.white,
+              backgroundColor: kActiveCardColourPrimary,
               onSelectedItemChanged: (int value) {
                 _controller2.text = (value + 1).toString();
                 setState(() {
@@ -195,21 +201,24 @@ class Comment_Card extends StatelessWidget  {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextField(
-                    onChanged: onChange,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        labelText: 'comment',
-                      labelStyle: TextStyle(
-                        color: Color(0xFF424242),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: TextField(
+                      onChanged: onChange,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'comment',
+                        labelStyle: TextStyle(
+                          color: Color(0xFF424242),
+                        ),
 
-                    ),
-                    style: TextStyle(
-                      fontSize: 20.0,
-                        color: Color(0xFF424242)
+                      ),
+                      style: TextStyle(
+                        fontSize: 20.0,
+                          color: Color(0xFF424242)
+                      ),
                     ),
                   ),
                 ],

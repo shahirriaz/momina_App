@@ -17,6 +17,10 @@ class _LoginScreenState extends State<LoginScreen> {
   String email;
   String password;
 
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  bool _validate = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -46,18 +50,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 TextField(
                   style: TextStyle(color: kLabelColor),
+                  controller: _email,
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
                     email = value;
                   },
                   decoration:
-                  kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                  kTextFieldDecoration.copyWith(hintText: 'Enter your email', errorText: _validate ? 'Email Can\'t Be Empty' : null),
                 ),
                 SizedBox(
                   height: 8.0,
                 ),
                 TextField(
+                  controller: _password,
                   style: TextStyle(color: kLabelColor),
                   obscureText: true,
                   textAlign: TextAlign.center,
@@ -65,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     password = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your password'),
+                      hintText: 'Enter your password', errorText: _validate ? 'Password Can\'t Be Empty' : null),
                 ),
                 SizedBox(
                   height: 24.0,
@@ -77,26 +83,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       showSpinner = true;
                     });
-                    try{
-                      final User = await _auth.signInWithEmailAndPassword(email: email, password: password).then((user) {
+                    setState(() {
+                      _email.text.isEmpty ? _validate = true : _validate =
+                      false;
+                    });
+                    if (_validate == false) {
+                      try {
+                        await _auth.signInWithEmailAndPassword(
+                            email: email, password: password).then((user) {
 
-                        Navigator.pushNamed(context, HomeScreen.id);
+                          Navigator.pushNamed(context, HomeScreen.id,);
 
-                        setState(() {
-                          showSpinner = false;
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        }).catchError((e) {
+                          showAlertDialog(context, 'Log in failed',
+                              'Please check your spelling and try again');
+                          setState(() {
+                            showSpinner = false;
+                          }); // code, message, details
                         });
+                      } catch (e) {
+                        print(e);
+                      }
 
-                      }).catchError((e) {
-                        showAlertDialog(context, 'Log in failed', 'Please check your spelling and try again');
-                        setState(() {
-                          showSpinner = false;
-                        });// code, message, details
+                    }else{
+                      print(_validate);
+                      setState(() {
+                        showSpinner = false;
                       });
-
-                    }catch (e) {
-                      print(e);
                     }
-                  },
+
+
+                  }
                 ),
               ],
             ),

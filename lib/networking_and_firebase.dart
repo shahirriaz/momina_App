@@ -104,7 +104,6 @@ class Networking {
 
     try{
 
-      final currentTime = DateTime.now().hour;
 
         _firestore.collection('sleepPattern').add({
           'awake' : awake,
@@ -121,7 +120,6 @@ class Networking {
     getCurrentUser();
 
     try{
-      final currentTime = DateTime.now().hour;
         _firestore.collection('sleepPattern').add({
           'asleep' : asleep,
           'sender' : loggedInUser.email,

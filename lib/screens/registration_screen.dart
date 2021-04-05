@@ -18,6 +18,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String email;
   String password;
 
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  bool _validate = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -46,6 +50,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   height: 48.0,
                 ),
                 TextField(
+                  controller: _email,
                   style: TextStyle(color: kLabelColor),
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,
@@ -53,12 +58,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     email = value;
                   },
                   decoration:
-                  kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                  kTextFieldDecoration.copyWith(hintText: 'Enter your email', errorText: _validate ? 'Email Can\'t Be Empty' : null),
                 ),
                 SizedBox(
                   height: 8.0,
                 ),
                 TextField(
+                  controller: _password,
                   style: TextStyle(color: kLabelColor),
                   obscureText: true,
                   textAlign: TextAlign.center,
@@ -66,7 +72,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     password = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                      hintText: 'Enter your password'),
+                      hintText: 'Enter your password', errorText: _validate ? 'Password Can\'t Be Empty' : null),
                 ),
                 SizedBox(
                   height: 24.0,
@@ -78,25 +84,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     setState(() {
                       showSpinner = true;
                     });
-                    try{
-                        final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password).then((user) {
+                    setState(() {
+                      _email.text.isEmpty ? _validate = true : _validate =
+                      false;
+                    });
+                    if (_validate == false) {
+                      try {
+                        await _auth.createUserWithEmailAndPassword(
+                            email: email, password: password).then((user) {
+                          Navigator.pushNamed(context, HomeScreen.id);
 
-                          Navigator.pushNamed(context, LoginScreen.id);
-
-                        setState(() {
-                          showSpinner = false;
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        }).catchError((e) {
+                          showAlertDialog(context, 'Log in failed',
+                              'Please check your spelling and try again');
+                          setState(() {
+                            showSpinner = false;
+                          }); // code, message, details
                         });
+                      } catch (e) {
+                        print(e);
+                      }
 
-                      }).catchError((e) {
-                        showAlertDialog(context, 'This User already exists, Please try again', 'This User already exists');
-                        setState(() {
-                          showSpinner = false;
-                        });// code, message, details
+                    }else{
+                      print(_validate);
+                      setState(() {
+                        showSpinner = false;
                       });
-
-
-                    }catch (e) {
-                      print(e);
                     }
 
                   },
